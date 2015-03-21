@@ -1,0 +1,17 @@
+<% for(var i = 0; i < outputs.length; i++){ %>
+	<tr style="text-align: left !important;">
+		<td></td>
+		<td><%= outputs[i].name %></td>
+		<td><%= outputs[i].type %></td>
+		<td><%= outputs[i].defaultValue %></td>
+		<td><%= outputs[i].defuzzification %></td>
+		<td>
+			<button type="button" class="btn btn-default btn-xs" style="width: 48%;">
+	  			<span class="glyphicon glyphicon-pencil"></span>
+			</button>
+			<button id="<%= outputs[i].id %>" type="button" class="removeInputs btn btn-default btn-xs" style="width: 48%;" onclick="removeOutputAndReloadOutputsTable(<%= outputs[i].id %>);">
+	  			<span class="glyphicon glyphicon-trash"></span>
+			</button>
+		</td>
+	</tr>
+<% } %>

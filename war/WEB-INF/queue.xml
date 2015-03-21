@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<queue-entries>
+	<!-- Change the total storage limit for all queues to 50MB -->
+	<!-- The default limit is 500M (500 megabytes) for free apps. -->
+	<total-storage-limit>500M</total-storage-limit>
+	<queue>
+		<name>default</name>
+		<rate>5/s</rate>
+	</queue>
+	<queue>
+	    <!-- The name of the queue. -->
+		<name>notification-queue</name>
+		<!-- How often tasks are processed on this queue. -->
+		<rate>5/s</rate>
+		<!-- Set the number of max concurrent requests to 10 -->
+		<max-concurrent-requests>10</max-concurrent-requests>
+		<!-- This addition allows you to specify the maximum number of times to retry failed tasks in a specific queue. -->
+		<retry-parameters>
+		    <!-- The maximum number of retry attempts for a failed task. -->
+			<task-retry-limit>3</task-retry-limit>
+			<!-- The time limit for retrying a failed task, measured from when the task was first run. -->
+			<task-age-limit>10m</task-age-limit>
+			<!-- The minimum number of seconds to wait before retrying a task after it fails. -->
+			<min-backoff-seconds>5</min-backoff-seconds>
+			<!-- The maximum number of seconds to wait before retrying a task after it fails. -->
+      		<max-backoff-seconds>300</max-backoff-seconds>
+      		<!-- The maximum number of times that the interval between failed task retries will be doubled before the increase becomes constant. -->
+      		<max-doublings>2</max-doublings>
+		</retry-parameters>
+	</queue>
+</queue-entries>

@@ -1,0 +1,11 @@
+;Importance;Coupling;Complexity
+Class 1;6;7;3
+Class 2;4;7;9
+Class 3;2;8;1
+Class 4;1;7;7
+Class 5;8;1;8
+Class 6;10;2;3
+Class 7;5;3;3
+Class 8;6;6;6
+Class 9;3;5;9
+Class 10;4;2;10

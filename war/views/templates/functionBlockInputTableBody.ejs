@@ -1,0 +1,16 @@
+<% for(var i = 0; i < inputs.length; i++){ %>
+	<tr style="text-align: left !important;">
+		<td></td>
+		<td><%= inputs[i].name %></td>
+		<td><%= inputs[i].type %></td>
+		<td><%= inputs[i].toStringTerms() %></td>
+		<td>
+			<button type="button" class="btn btn-default btn-xs" style="width: 48%;">
+	  			<span class="glyphicon glyphicon-pencil"></span>
+			</button>
+			<button id="<%= inputs[i].id %>" type="button" class="removeInputs btn btn-default btn-xs" style="width: 48%;" onclick="removeInputAndReloadInputsTable(<%= inputs[i].id %>);">
+	  			<span class="glyphicon glyphicon-trash"></span>
+			</button>
+		</td>
+	</tr>
+<% } %>

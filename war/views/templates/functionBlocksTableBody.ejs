@@ -1,0 +1,16 @@
+<% for(var i = 0; i < functionBlocks.length; i++){ %>
+	<tr style="text-align: left !important;">
+		<td></td>
+		<td><%= functionBlocks[i].name %></td>
+		<td><%= functionBlocks[i].toStringInputs() %></td>
+		<td><%= functionBlocks[i].toStringOutputs() %></td>
+		<td>
+			<button type="button" class="btn btn-default btn-xs" style="width: 48%;">
+	  			<span class="glyphicon glyphicon-pencil"></span>
+			</button>
+			<button id="<%= functionBlocks[i].id %>" type="button" class="btn btn-default btn-xs" style="width: 48%;" onclick="removeFunctionBlockAndReloadFunctionBlocksTable(<%= functionBlocks[i].id %>);">
+	  			<span class="glyphicon glyphicon-trash"></span>
+			</button>
+		</td>
+	</tr>
+<% } %>

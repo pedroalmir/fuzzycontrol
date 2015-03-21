@@ -1,0 +1,13 @@
+<% for(var i = 0; i < linguisticTerms.length; i++){ %>
+	<tr style="text-align: left !important;">
+		<td></td>
+		<td><%= linguisticTerms[i].name %></td>
+		<td><%= linguisticTerms[i].termFunctionName %></td>
+		<td><%= linguisticTerms[i].values %></td>
+		<td>
+			<button id="<%= linguisticTerms[i].id %>" type="button" class="removeLinguisticTerm btn btn-default btn-xs" style="width: 100%;" onclick="removeTermAndReloadLinguisticTermsTable(<%= linguisticTerms[i].id %>, '<%= target %>');">
+	  			<span class="glyphicon glyphicon-trash"></span>
+			</button>
+		</td>
+	</tr>
+<% } %>

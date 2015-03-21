@@ -1,0 +1,11 @@
+<tr style="text-align: left !important;">
+	<td></td>
+	<td><%= term.name %></td>
+	<td><%= term.termFunctionName %></td>
+	<td><%= term.values %></td>
+	<td>
+		<button id="<%= term.id %>" type="button" class="removeLinguisticTerm btn btn-default btn-xs" style="width: 100%;" onclick="removeTermAndReloadLinguisticTermsTable(<%= term.id %>, '<%= target %>');">
+  			<span class="glyphicon glyphicon-trash"></span>
+		</button>
+	</td>
+</tr>
