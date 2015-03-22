@@ -12,10 +12,13 @@ import net.sourceforge.jFuzzyLogic.rule.LinguisticTerm;
 import net.sourceforge.jFuzzyLogic.rule.Variable;
 
 import com.fuzzycontrol.core.controller.base.FuzzyControlInterface;
+import com.fuzzycontrol.core.model.fuzzy.FuzzyCoordinate;
 import com.fuzzycontrol.core.model.fuzzy.FuzzySystem;
 import com.fuzzycontrol.core.model.fuzzy.enums.DefuzzificationMethod;
 import com.fuzzycontrol.core.model.fuzzy.enums.MembershipFunctionEnum;
 import com.fuzzycontrol.core.model.fuzzy.enums.VariableType;
+import com.fuzzycontrol.core.model.fuzzy.exception.InvalidParametersSizeException;
+import com.fuzzycontrol.core.model.fuzzy.exception.MembershipFunctionInstantiationException;
 
 /**
  * @author Pedro Almir
@@ -85,8 +88,7 @@ public class FuzzyController implements FuzzyControlInterface {
 	}
 
 	@Override
-	public MembershipFunction createMembershipFunction(MembershipFunctionEnum function, List<String> params) {
-		//FIXME - TO BE CONTINUED... 
+	public MembershipFunction createMembershipFunction(MembershipFunctionEnum function, List<FuzzyCoordinate> params) throws InvalidParametersSizeException, MembershipFunctionInstantiationException {
 		return function.createMembershipFunction(params);
 	}
 
