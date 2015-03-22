@@ -1,5 +1,6 @@
 package com.fuzzycontrol.core.fuzzy
 
+import net.sourceforge.jFuzzyLogic.membership.MembershipFunctionTrapetzoidal;
 import net.sourceforge.jFuzzyLogic.membership.MembershipFunctionTriangular
 import spock.lang.Specification
 
@@ -50,6 +51,30 @@ class FuzzyControllerSpec extends Specification {
 			controller.createMembershipFunction(MembershipFunctionEnum.TRIANGULAR, toCoordinate([1.5:0, 1:1, 2:0]))
 		then:
 			thrown(MembershipFunctionInstantiationException)
+	}
+	
+	/*@Scenario: Instanciando a função de pertinência TRAPEZOIDAL*/
+	void "deve instanciar funções de pertinência TRAPEZOIDAL"() {
+		when:
+			def function = controller.createMembershipFunction(MembershipFunctionEnum.TRAPETZOIDAL, toCoordinate([1:0, 1.5:0, 2:1, 2.5:1]))
+		then:
+			function instanceof MembershipFunctionTrapetzoidal
+			function.getParameter(0) == 1
+			function.getParameter(1) == 1.5
+			function.getParameter(2) == 2
+			function.getParameter(3) == 2.5
+	}
+
+	void "deve falhar quando a quantidade de parâmentros for diferente da espearada para funções TRAPEZOIDAIS"() {
+		when:"informar um quantidade inferior de parâmetros"
+			controller.createMembershipFunction(MembershipFunctionEnum.TRAPETZOIDAL, toCoordinate([1:0, 1.5:1, 2:0]))
+		then:
+			thrown(InvalidParametersSizeException)
+			
+		when:"informar um quantidade superior de parâmetros"
+			controller.createMembershipFunction(MembershipFunctionEnum.TRAPETZOIDAL, toCoordinate([1:0, 1.5:1, 2:0, 3:1, 3.5:1]))
+		then:
+			thrown(InvalidParametersSizeException)
 	}
 	
 	/*Helper Methods*/
