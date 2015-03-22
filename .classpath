@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="test"/>
 	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/objectify-4.0b1.jar"/>
@@ -15,5 +16,9 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/jFuzzyLogic_v3.0.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/velocity-1.7.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/opencsv-2.3.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/junit-4.10.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/spock-core-1.0-groovy-2.3.jar"/>
+	<classpathentry exported="true" kind="con" path="GROOVY_DSL_SUPPORT"/>
+	<classpathentry exported="true" kind="con" path="GROOVY_SUPPORT"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>
