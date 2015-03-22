@@ -1,15 +1,18 @@
 package com.fuzzycontrol.core.fuzzy
 
-import net.sourceforge.jFuzzyLogic.membership.MembershipFunctionTrapetzoidal;
+import net.sourceforge.jFuzzyLogic.membership.MembershipFunctionTrapetzoidal
 import net.sourceforge.jFuzzyLogic.membership.MembershipFunctionTriangular
 import spock.lang.Specification
 
 import com.fuzzycontrol.core.controller.base.FuzzyControlInterface
 import com.fuzzycontrol.core.controller.fuzzy.FuzzyController
 import com.fuzzycontrol.core.model.fuzzy.FuzzyCoordinate
+import com.fuzzycontrol.core.model.fuzzy.FuzzyTerm
 import com.fuzzycontrol.core.model.fuzzy.enums.MembershipFunctionEnum
+import com.fuzzycontrol.core.model.fuzzy.enums.VariableType
 import com.fuzzycontrol.core.model.fuzzy.exception.InvalidParametersSizeException
 import com.fuzzycontrol.core.model.fuzzy.exception.MembershipFunctionInstantiationException
+import com.fuzzycontrol.core.model.fuzzy.put.Input
 
 class FuzzyControllerSpec extends Specification {
 	
@@ -75,6 +78,52 @@ class FuzzyControllerSpec extends Specification {
 			controller.createMembershipFunction(MembershipFunctionEnum.TRAPETZOIDAL, toCoordinate([1:0, 1.5:1, 2:0, 3:1, 3.5:1]))
 		then:
 			thrown(InvalidParametersSizeException)
+	}
+	
+	/**
+	 * @Method: createTerm(...)
+	 */
+	
+	/*@Scenario: Criando um termo linguístico*/
+	void "deve criar termos linguisticos"() {
+		when:
+			def term = controller.createTerm(new FuzzyTerm("BAIXA", MembershipFunctionEnum.TRIANGULAR, toCoordinate([1:0, 1.5:1, 2:0])))
+		then:
+			term.termName == "BAIXA"
+			term.membershipFunction instanceof MembershipFunctionTriangular	
+	}
+	
+	/**
+	 * @Method: createInput(...)
+	 */
+	
+	/*@Scenario: Criando uma variável linguística a partir de um Input*/
+	void "deve criar uma variável linguística"() {
+		given:
+			def termBAIXA = new FuzzyTerm("BAIXA", MembershipFunctionEnum.TRIANGULAR, toCoordinate([1:0, 1.5:1, 2:0]))
+			def termMEDIA = new FuzzyTerm("MEDIA", MembershipFunctionEnum.TRIANGULAR, toCoordinate([1.5:0, 2:1, 2.5:0]))
+		when:
+			def variable = controller.createInput(new Input("Temperatura", VariableType.REAL, [termBAIXA, termMEDIA]))
+		then:
+			variable.input
+			variable.name == "Temperatura"
+			variable.linguisticTerms.size() == 2
+	}
+	
+	void "deve substituir um termo caso já existe algum com a mesma descrição"() {
+		given:
+			def term1 = new FuzzyTerm("BAIXA", MembershipFunctionEnum.TRIANGULAR, toCoordinate([1:0, 1.5:1, 2:0]))
+			def term2 = new FuzzyTerm("BAIXA", MembershipFunctionEnum.TRIANGULAR, toCoordinate([1.5:0, 2:1, 2.5:0]))
+		when:
+			def variable = controller.createInput(new Input("Temperatura", VariableType.REAL, [term1, term2]))
+		then:
+			variable.input
+			variable.name == "Temperatura"
+			variable.linguisticTerms.size() == 1
+		and:"as coordenadas correspondem às do termo inserido por último"
+			variable.linguisticTerms["BAIXA"].membershipFunction.getParameter(0) == 1.5
+			variable.linguisticTerms["BAIXA"].membershipFunction.getParameter(1) == 2
+			variable.linguisticTerms["BAIXA"].membershipFunction.getParameter(2) == 2.5
 	}
 	
 	/*Helper Methods*/

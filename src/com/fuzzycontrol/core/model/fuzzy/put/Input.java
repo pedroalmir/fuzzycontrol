@@ -35,8 +35,6 @@ public class Input {
 		this.terms = terms;
 	}
 	
-	
-	
 	/**
 	 * @return the name
 	 */

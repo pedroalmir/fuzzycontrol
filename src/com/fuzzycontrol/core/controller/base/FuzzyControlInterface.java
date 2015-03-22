@@ -13,11 +13,13 @@ import net.sourceforge.jFuzzyLogic.rule.Variable;
 
 import com.fuzzycontrol.core.model.fuzzy.FuzzyCoordinate;
 import com.fuzzycontrol.core.model.fuzzy.FuzzySystem;
+import com.fuzzycontrol.core.model.fuzzy.FuzzyTerm;
 import com.fuzzycontrol.core.model.fuzzy.enums.DefuzzificationMethod;
 import com.fuzzycontrol.core.model.fuzzy.enums.MembershipFunctionEnum;
 import com.fuzzycontrol.core.model.fuzzy.enums.VariableType;
 import com.fuzzycontrol.core.model.fuzzy.exception.InvalidParametersSizeException;
 import com.fuzzycontrol.core.model.fuzzy.exception.MembershipFunctionInstantiationException;
+import com.fuzzycontrol.core.model.fuzzy.put.Input;
 
 /**
  * @author Pedro Almir
@@ -30,6 +32,7 @@ public interface FuzzyControlInterface {
 	 * @return FuzzySytem
 	 */
 	FIS createSystem(FuzzySystem system);
+	
 	/**
 	 * @param system
 	 * @param control
@@ -56,12 +59,6 @@ public interface FuzzyControlInterface {
 	/**
 	 * @param name
 	 * @param variableType
-	 * @return Input
-	 */
-	Variable createInput(String name, VariableType variableType);
-	/**
-	 * @param name
-	 * @param variableType
 	 * @param defuzzificationMethod
 	 * @param defaultValue
 	 * @return Output
@@ -79,18 +76,9 @@ public interface FuzzyControlInterface {
 	 */
 	void addOutputTerm(Variable output, LinguisticTerm term);
 	
-	/**
-	 * @param name
-	 * @param function
-	 * @return LinguisticTerm
-	 */
-	LinguisticTerm createTerm(String name, MembershipFunction function);
+	//TODO - To Comment
 	
-	/**
-	 * Create Membership Function
-	 * @param function
-	 * @param params
-	 * @return MembershipFunction
-	 */
+	Variable createInput(Input input) throws InvalidParametersSizeException, MembershipFunctionInstantiationException;
+	LinguisticTerm createTerm(FuzzyTerm fuzzyTerm) throws InvalidParametersSizeException, MembershipFunctionInstantiationException;
 	MembershipFunction createMembershipFunction(MembershipFunctionEnum function, List<FuzzyCoordinate> params) throws InvalidParametersSizeException, MembershipFunctionInstantiationException;
 }
