@@ -35,8 +35,7 @@ public class Output {
 	 * @param defuzzificationMethod
 	 * @param defaultValue
 	 */
-	public Output(String name, VariableType type, List<FuzzyTerm> terms,
-			DefuzzificationMethod defuzzificationMethod, String defaultValue) {
+	public Output(String name, VariableType type, List<FuzzyTerm> terms, DefuzzificationMethod defuzzificationMethod, String defaultValue) {
 		this.name = name;
 		this.type = type;
 		this.terms = terms;

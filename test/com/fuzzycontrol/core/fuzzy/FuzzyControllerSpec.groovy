@@ -2,24 +2,41 @@ package com.fuzzycontrol.core.fuzzy
 
 import net.sourceforge.jFuzzyLogic.membership.MembershipFunctionTrapetzoidal
 import net.sourceforge.jFuzzyLogic.membership.MembershipFunctionTriangular
+import spock.lang.Shared
 import spock.lang.Specification
 
 import com.fuzzycontrol.core.controller.base.FuzzyControlInterface
 import com.fuzzycontrol.core.controller.fuzzy.FuzzyController
+import com.fuzzycontrol.core.model.fuzzy.FuzzyControl
 import com.fuzzycontrol.core.model.fuzzy.FuzzyCoordinate
+import com.fuzzycontrol.core.model.fuzzy.FuzzySystem
 import com.fuzzycontrol.core.model.fuzzy.FuzzyTerm
 import com.fuzzycontrol.core.model.fuzzy.enums.MembershipFunctionEnum
 import com.fuzzycontrol.core.model.fuzzy.enums.VariableType
 import com.fuzzycontrol.core.model.fuzzy.exception.InvalidParametersSizeException
 import com.fuzzycontrol.core.model.fuzzy.exception.MembershipFunctionInstantiationException
 import com.fuzzycontrol.core.model.fuzzy.put.Input
+import com.fuzzycontrol.core.model.fuzzy.put.Output
 
 class FuzzyControllerSpec extends Specification {
 	
 	FuzzyControlInterface controller
 	
+	@Shared
+	def input, output
+	
 	def setup() {
 		controller = new FuzzyController()
+	}
+	
+	def setupSpec() {
+		def termBAIXA = new FuzzyTerm("BAIXA", MembershipFunctionEnum.TRIANGULAR, toCoordinate([1:0, 1.5:1, 2:0]))
+		def termMEDIA = new FuzzyTerm("MEDIA", MembershipFunctionEnum.TRIANGULAR, toCoordinate([1.5:0, 2:1, 2.5:0]))
+		input = new Input("Temperatura", VariableType.REAL, [termBAIXA, termMEDIA])
+		
+		def termBOM = new FuzzyTerm("BOM", MembershipFunctionEnum.TRIANGULAR, toCoordinate([1:0, 1.5:1, 2:0]))
+		def termRUIM = new FuzzyTerm("RUIM", MembershipFunctionEnum.TRIANGULAR, toCoordinate([1.5:0, 2:1, 2.5:0]))
+		output = new Output("Atendimento", VariableType.REAL, [termBOM, termRUIM], null, "0.9")
 	}
 	
 	/**
@@ -98,32 +115,61 @@ class FuzzyControllerSpec extends Specification {
 	 */
 	
 	/*@Scenario: Criando uma variável linguística a partir de um Input*/
-	void "deve criar uma variável linguística"() {
-		given:
-			def termBAIXA = new FuzzyTerm("BAIXA", MembershipFunctionEnum.TRIANGULAR, toCoordinate([1:0, 1.5:1, 2:0]))
-			def termMEDIA = new FuzzyTerm("MEDIA", MembershipFunctionEnum.TRIANGULAR, toCoordinate([1.5:0, 2:1, 2.5:0]))
+	void "deve criar uma variável linguística a partir de um Input"() {
 		when:
-			def variable = controller.createInput(new Input("Temperatura", VariableType.REAL, [termBAIXA, termMEDIA]))
+			def variable = controller.createInput(input)
 		then:
 			variable.input
 			variable.name == "Temperatura"
 			variable.linguisticTerms.size() == 2
 	}
 	
-	void "deve substituir um termo caso já existe algum com a mesma descrição"() {
-		given:
-			def term1 = new FuzzyTerm("BAIXA", MembershipFunctionEnum.TRIANGULAR, toCoordinate([1:0, 1.5:1, 2:0]))
-			def term2 = new FuzzyTerm("BAIXA", MembershipFunctionEnum.TRIANGULAR, toCoordinate([1.5:0, 2:1, 2.5:0]))
+	/**
+	 * @Method: createOutput(...)
+	 */
+	
+	/*@Scenario: Criando uma variável linguística a partir de um Output*/
+	void "deve criar uma variável linguística a partir de um Output"() {
 		when:
-			def variable = controller.createInput(new Input("Temperatura", VariableType.REAL, [term1, term2]))
+			def variable = controller.createOutput(output)
 		then:
-			variable.input
-			variable.name == "Temperatura"
-			variable.linguisticTerms.size() == 1
-		and:"as coordenadas correspondem às do termo inserido por último"
-			variable.linguisticTerms["BAIXA"].membershipFunction.getParameter(0) == 1.5
-			variable.linguisticTerms["BAIXA"].membershipFunction.getParameter(1) == 2
-			variable.linguisticTerms["BAIXA"].membershipFunction.getParameter(2) == 2.5
+			variable.output
+			variable.name == "Atendimento"
+			variable.linguisticTerms.size() == 2
+	}
+
+	/**
+	 * @Method: createFuzzyControl(...)
+	 */
+	
+	/*@Scenario: Criando um bloco de função a partir de um FuzzyControl*/
+	void "deve instanciar um bloco de função a partir de um FuzzyControl"() {
+		given:
+			def fuzzyControl = new FuzzyControl("Controle de Caldeira", "")
+			fuzzyControl.addInput(input)
+			fuzzyControl.addOutput(output)
+		when:
+			def functionBlock = controller.createFuzzyControl(fuzzyControl, null)
+		then:
+			functionBlock.name == fuzzyControl.name
+			functionBlock.variablesByName.containsKey(input.name)
+			functionBlock.variablesByName.containsKey(output.name)
+	}
+	
+	/**
+	 * @Method: createFuzzySystem(...)
+	 */
+	
+	/*@Scenario: Criando um sistema fuzzy a partir de um FuzzySystem*/
+	void "deve instanciar um FIS a partir de um FuzzySystem"() {
+		given:
+			def fuzzyControl = new FuzzyControl("Controle de Caldeira", "")
+			def fuzzySystem = new FuzzySystem("Sistema Fuzzy", "")
+			fuzzySystem.addFuzzyControl(fuzzyControl)
+		when:
+			def system = controller.createFuzzySystem(fuzzySystem)
+		then:
+			system.functionBlocks.containsKey(fuzzyControl.name)	
 	}
 	
 	/*Helper Methods*/
